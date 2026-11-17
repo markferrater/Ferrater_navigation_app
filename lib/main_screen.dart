@@ -1,8 +1,12 @@
+import 'package:ferrater_navigation_app/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'calculator_screen.dart';
 import 'profile_page.dart';
-import 'social_media_page.dart';
+// import 'social_media_page.dart';
+
+import 'demo_auth.dart';
+import 'social_media/social_media.dart';
  
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -14,20 +18,51 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int selectedIndex = 0;
  
-  final List<Widget> pages = const [
-    HomePage(),
-    CalculatorScreen(),
-    ProfilePage(),
-    SocialMediaPage(),
-  ];
- 
+  late final List<Widget> pages;
+  
+  @override
+  void initState() {
+    super.initState();
+  
+    pages = [
+      const HomePage(),
+      const CalculatorScreen(),
+      const ProfilePage(),
+      SocialMediaPage(
+        username: DemoAuth.currentUsername!,
+      ),
+    ];
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: const Icon(Icons.token_outlined),
+        title: const Text('Welcome User'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () {
+              DemoAuth.logout();
+
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+                (route) => false,
+              );
+            },
+          ),
+        ],
+      ),
+
       body: IndexedStack(
         index: selectedIndex,
         children: pages,
       ),
+
+
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
         onDestinationSelected: (int index) {
@@ -56,6 +91,7 @@ class _MainScreenState extends State<MainScreen> {
             selectedIcon: Icon(Icons.share),
             label: 'Social Media',
           ),
+          
         ],
       ),
     );
