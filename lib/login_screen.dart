@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
  
     if (valid) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const MainScreen()));
+        MaterialPageRoute(builder: (context) => const MainScreen()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid username or password.')),
